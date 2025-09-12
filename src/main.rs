@@ -13,13 +13,15 @@ use conversion::circom_to_bulletproofs;
 
 fn default_main() -> Result<(), Box<dyn std::error::Error>> {
     let cfg = CircomConfig::<Fr>::new(
-        "circuits/multiplier2_js/multiplier2.wasm",
-        "circuits/multiplier2.r1cs",
+        "./circuits/simpleCheck_js/simpleCheck.wasm",
+        "./circuits/simpleCheck.r1cs",
     )?;
 
     let mut builder = CircomBuilder::new(cfg);
     builder.push_input("a", 3);
     builder.push_input("b", 11);
+    builder.push_input("c", 14);
+    builder.push_input("d", 154);
 
     let circom: CircomCircuit<Fr> = builder.build().unwrap();
 

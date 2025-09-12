@@ -22,11 +22,18 @@ pub fn circom_to_bulletproofs<Fr: Field + PrimeField>(
         return Err(ConversionError::EmptyCircuit);
     }
     
-    // Initialize constraint matrices for bulletproofs format
-    let mut w_l = vec![vec![Fr::zero(); num_variables]; num_constraints];
-    let mut w_r = vec![vec![Fr::zero(); num_variables]; num_constraints];
-    let mut w_o = vec![vec![Fr::zero(); num_variables]; num_constraints];
-    let w_v = vec![vec![Fr::zero(); num_variables]; num_constraints];
+    // Pad to next power of 2 for bulletproofs compatibility
+    let padded_num_variables = if num_variables.is_power_of_two() {
+        num_variables
+    } else {
+        num_variables.next_power_of_two()
+    };
+    
+    // Initialize constraint matrices for bulletproofs format using padded size
+    let mut w_l = vec![vec![Fr::zero(); padded_num_variables]; num_constraints];
+    let mut w_r = vec![vec![Fr::zero(); padded_num_variables]; num_constraints];
+    let mut w_o = vec![vec![Fr::zero(); padded_num_variables]; num_constraints];
+    let w_v = vec![vec![Fr::zero(); padded_num_variables]; num_constraints];
     let c = vec![Fr::zero(); num_constraints];
     
     // Convert each R1CS constraint: A·w ⊙ B·w = C·w
@@ -40,21 +47,21 @@ pub fn circom_to_bulletproofs<Fr: Field + PrimeField>(
         
         // Set A coefficients in w_l
         for &(var_idx, coeff) in a_vec {
-            if var_idx < num_variables {
+            if var_idx < padded_num_variables {
                 w_l[constraint_idx][var_idx] = coeff;
             }
         }
         
         // Set B coefficients in w_r  
         for &(var_idx, coeff) in b_vec {
-            if var_idx < num_variables {
+            if var_idx < padded_num_variables {
                 w_r[constraint_idx][var_idx] = coeff;
             }
         }
         
         // Set -C coefficients in w_o (negated because we move C to LHS)
         for &(var_idx, coeff) in c_vec {
-            if var_idx < num_variables {
+            if var_idx < padded_num_variables {
                 w_o[constraint_idx][var_idx] = -coeff;
             }
         }
@@ -63,8 +70,8 @@ pub fn circom_to_bulletproofs<Fr: Field + PrimeField>(
         // and constant term c remains zero for pure R1CS constraints
     }
     
-    // Extract witness values, applying wire mapping if present
-    let mapped_witness = if let Some(wire_mapping) = &r1cs.wire_mapping {
+    // Extract witness values, applying wire mapping if present, then pad to power of 2
+    let mut mapped_witness = if let Some(wire_mapping) = &r1cs.wire_mapping {
         // Apply wire mapping: mapped_witness[i] = witness[wire_mapping[i]]
         wire_mapping.iter()
             .take(num_variables)
@@ -73,10 +80,13 @@ pub fn circom_to_bulletproofs<Fr: Field + PrimeField>(
                     .copied()
                     .unwrap_or(Fr::zero())
             })
-            .collect()
+            .collect::<Vec<_>>()
     } else {
         witness_values[..num_variables].to_vec()
     };
+    
+    // Pad witness with zeros to reach power of 2 size
+    mapped_witness.resize(padded_num_variables, Fr::zero());
     
     // For R1CS constraints, we need to properly construct the bulletproofs witness
     // The R1CS constraint A·w ⊙ B·w = C·w needs to be satisfied by the witness
@@ -84,16 +94,16 @@ pub fn circom_to_bulletproofs<Fr: Field + PrimeField>(
     // such that the constraint matrices work correctly
     
     // For now, use a simple mapping where we put witness values appropriately
-    let a_l = vec![Fr::zero(); num_variables];
-    let a_r = vec![Fr::zero(); num_variables]; 
-    let a_o = vec![Fr::zero(); num_variables];
+    let a_l = vec![Fr::zero(); padded_num_variables];
+    let a_r = vec![Fr::zero(); padded_num_variables]; 
+    let a_o = vec![Fr::zero(); padded_num_variables];
     let v = mapped_witness;
     
     let circuit = Circuit::new(w_l, w_r, w_o, w_v, c);
     
     // Create witness with random gamma values
     let witness = {
-        let gamma = (0..num_variables).map(|_| Fr::zero()).collect(); // Could use random values
+        let gamma = (0..padded_num_variables).map(|_| Fr::zero()).collect(); // Could use random values
         Witness {
             a_l,
             a_r, 
