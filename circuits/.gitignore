@@ -1,0 +1,4 @@
+*.sym
+*.r1cs
+multiplier2_js
+multiplier2_cpp
