@@ -577,6 +577,8 @@ dependencies = [
  "ark-ff",
  "bulletproofs",
  "rand 0.8.5",
+ "serde",
+ "serde_json",
  "spongefish",
  "thiserror 1.0.69",
 ]

@@ -11,6 +11,8 @@ ark-ff = "0.5.0"
 thiserror = "1.0"
 spongefish = {git = "https://github.com/arkworks-rs/spongefish" , ref = "3ded547", features = ["arkworks-algebra"]}
 rand = "0.8"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 
 [patch.crates-io]
 ark-relations = { git = "https://github.com/arkworks-rs/snark.git" }
