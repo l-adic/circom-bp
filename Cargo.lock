@@ -72,6 +72,7 @@ dependencies = [
 [[package]]
 name = "ark-circom"
 version = "0.5.0"
+source = "git+https://github.com/arkworks-rs/circom-compat.git?rev=09e92d4#09e92d4c5887cec9ea558dc7e775a8ab3b02aafc"
 dependencies = [
  "ark-bn254",
  "ark-crypto-primitives",
@@ -446,6 +447,7 @@ dependencies = [
 [[package]]
 name = "bulletproofs"
 version = "0.1.0"
+source = "git+https://github.com/l-adic/bulletproofs?branch=weird-build#10c563848b9b0ba801a1122ef22bee34f2b69348"
 dependencies = [
  "ark-ec",
  "ark-ff",
