@@ -62,7 +62,7 @@ checksum = "c3d036a3c4ab069c7b410a2ce876bd74808d2d0888a82667669f8e783a898bf1"
 [[package]]
 name = "ark-bn254"
 version = "0.5.0"
-source = "git+https://github.com/arkworks-rs/algebra.git#21d59f0b499562b9d9d9c39ba8c6ff5cbdc14df1"
+source = "git+https://github.com/arkworks-rs/algebra.git#9eaf926dcc69f0e13332387c3241be8e8313e934"
 dependencies = [
  "ark-ec",
  "ark-ff",
@@ -72,7 +72,7 @@ dependencies = [
 [[package]]
 name = "ark-circom"
 version = "0.5.0"
-source = "git+https://github.com/arkworks-rs/circom-compat.git?rev=09e92d4#09e92d4c5887cec9ea558dc7e775a8ab3b02aafc"
+source = "git+https://github.com/arkworks-rs/circom-compat?rev=09e92d4#09e92d4c5887cec9ea558dc7e775a8ab3b02aafc"
 dependencies = [
  "ark-bn254",
  "ark-crypto-primitives",
@@ -259,7 +259,7 @@ dependencies = [
 [[package]]
 name = "ark-secp256k1"
 version = "0.5.0"
-source = "git+https://github.com/arkworks-rs/algebra.git#c6fef0efed6217dca97f1a3612d210c7f64a1acb"
+source = "git+https://github.com/arkworks-rs/algebra.git#9eaf926dcc69f0e13332387c3241be8e8313e934"
 dependencies = [
  "ark-ec",
  "ark-ff",
@@ -447,7 +447,7 @@ dependencies = [
 [[package]]
 name = "bulletproofs"
 version = "0.1.0"
-source = "git+https://github.com/l-adic/bulletproofs?branch=weird-build#10c563848b9b0ba801a1122ef22bee34f2b69348"
+source = "git+https://github.com/l-adic/bulletproofs?rev=71ff9d5#71ff9d51050fde08102db567fbe4c31e9d592402"
 dependencies = [
  "ark-ec",
  "ark-ff",
