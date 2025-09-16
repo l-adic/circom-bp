@@ -21,23 +21,11 @@ jobs:
     - name: Install Rust
       uses: dtolnay/rust-toolchain@stable
 
-    - name: Install circom
-      run: |
-        curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
-        source ~/.cargo/env
-        git clone https://github.com/iden3/circom.git
-        cd circom
-        cargo build --release
-        cargo install --path circom
-
-    - name: Install snarkjs
-      run: npm install -g snarkjs
+    - name: Install npm dependencies
+      run: npm install
 
     - name: Compile circuits
-      run: |
-        cd circuits
-        ~/.cargo/bin/circom multiplier2.circom --r1cs --wasm --sym
-        ~/.cargo/bin/circom simpleCheck.circom --r1cs --wasm --sym
+      run: npm run compile-circuits
 
     - name: Rust Cache
       uses: Swatinem/rust-cache@v2

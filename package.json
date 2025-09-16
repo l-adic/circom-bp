@@ -1,0 +1,12 @@
+{
+  "name": "circom-bp",
+  "version": "1.0.0",
+  "description": "A Rust library that bridges Circom circuits with Bulletproofs zero-knowledge proof system",
+  "scripts": {
+    "compile-circuits": "cd circuits && circom2 multiplier2.circom --r1cs --wasm --sym && circom2 simpleCheck.circom --r1cs --wasm --sym"
+  },
+  "devDependencies": {
+    "circom2": "0.2.22",
+    "snarkjs": "^0.7.4"
+  }
+}
